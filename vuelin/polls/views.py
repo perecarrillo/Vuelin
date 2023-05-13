@@ -2,18 +2,27 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
+import player as pl
+
+# pl.connectToHost()
+# pl.enterGame("abc")
+
 def getCountries():
     return ['Barcelona','Paris','London']
 
 def getPlayerNames():
     return ['Laura', 'Marc', 'Paula','Pere', '...', '...','...','...','...','...']
+    #return pl.getPlayerNames()
 
 def index(request):
     return render(request,"index.html")
 
 def gameCreator(request):
+        
     countries = getCountries()
     context = {"countries": countries}
+    
+    answer = request.GET['countryName'] 
     return render(request,'gameCreator.html',context)
 
 def waitingRoomHost(request):
