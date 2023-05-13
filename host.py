@@ -91,7 +91,7 @@ class Player:
         self.addr = addr
     
     def getName(self):
-        return "Hey"
+        return "Hey "
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())

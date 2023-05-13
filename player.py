@@ -1,24 +1,45 @@
-import socket as sc
+import vuelin.playerController as pl
+import time
 
-class Player:
-    def __init__(self):
-        pass
-        
-    def connectToHost(self):
-        print("ConnectToHost")
-        self.client = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
-        self.client.connect(("c8:b2:9b:1a:74:b1", 4))
+pc = pl.PlayerController()
 
+name = input("Input your name: ")
+pc.registerPlayer(name)
 
-    def enterGame(self, name):
-        print("EnterGame " + str(name))
-        self.client.send(name.encode("utf-8"))
+pc.connectToHost()
 
+pc.enterGame("abc")
 
-    def getPlayerNames(self):
-        return self.client.recv(4096).decode("utf-8").split(";")
-        
+while not pc.hasGameStarted():
+    print(pc.getPlayerNames())
+    time.sleep(5)
 
-    def finish(self):
-        self.client.close()
+# Game Starts
 
+initialQuote = input("Input your initial sentence, it must contain the word " + pc.getMyWord() + ": ")
+# Comprovar prompt
+pc.setInitialQuote(initialQuote)
+
+rounds = pc.getRounds()
+quoteRound = True
+for i in range(rounds):
+    if quoteRound:
+        sentence = pc.receiveSentence()
+        print("Draw this: " + sentence)
+
+        photo = readPhoto()
+        pc.sendPhoto(photo)
+
+    else: 
+        photo = pc.receivePhoto()
+        showPhoto(photo)
+        sentence = input("Write a sentence that describes this photo: ")
+        pc.sendSentence(sentence)
+
+# Game has finished
+
+hist = pc.getHistory()
+print("History: ")
+print(hist)
+
+pc.finish()

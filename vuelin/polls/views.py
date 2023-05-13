@@ -1,34 +1,77 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
+from django import forms
 
+from time import sleep 
 import player as pl
 
-# pl.connectToHost()
-# pl.enterGame("abc")
+
+# playerloco = pl.Player()
+# playerloco.connectToHost()
+# playerloco.enterGame("abc")
 
 def getCountries():
-    return ['Barcelona','Paris','London']
+    return [('barcelona','Barcelona'),('paris','Paris'),('london','London')]
 
 def getPlayerNames():
     return ['Laura', 'Marc', 'Paula','Pere', '...', '...','...','...','...','...']
-    #return pl.getPlayerNames()
+    #return playerloco.getPlayerNames()
+
+def getCodes():
+    return ['a','b','c']
 
 def index(request):
     return render(request,"index.html")
 
+def gameIsReady():
+    return True
+
+def getPromptWord():
+    return "holi"
+
+class CountriesForm(forms.Form):
+    destination = forms.ChoiceField(choices=getCountries())
+    code = forms.CharField(max_length=50)
+
 def gameCreator(request):
-        
-    countries = getCountries()
-    context = {"countries": countries}
-    
-    answer = request.GET['countryName'] 
-    return render(request,'gameCreator.html',context)
+    if request.method == 'POST':
+        form = CountriesForm(request.POST)
+        if form.is_valid():
+            destination = form.cleaned_data['destination']
+            code = form.cleaned_data['code']
+            print(destination + code)
+            return redirect('waitingRoomHost')
+    else:
+        form = CountriesForm()
+    return render(request, 'gameCreator.html', {'form': form})    
 
 def waitingRoomHost(request):
     players = getPlayerNames()
     context = {"players": players}
     return render(request,'waitingRoomHost.html',context)
 
-def vote(request, question_id):
-    return HttpResponse("You're voting on question %s." % question_id)
+def waitingRoomPlayer(request):
+    sleep(3)
+    if gameIsReady():
+        return redirect('writePrompt')
+    else:
+        return render(request,'waitingRoomPlayer.html')
+    
+class PromptForm(forms.Form):
+    prompt = forms.CharField(max_length=50)
+
+def writePrompt(request):
+    word = getPromptWord()
+    if request.method == 'POST':
+        form = PromptForm(request.POST)
+        if form.is_valid():
+            prompt = form.cleaned_data['prompt']
+            print(prompt)
+            if word in prompt.lower():
+                return redirect('drawImage')
+            else:
+                return render(request,'writePrompt.html',{"promptWord": word,'form': form})
+    else:
+        form = PromptForm()
+    return render(request,'writePrompt.html',{"promptWord": word,'form': form})

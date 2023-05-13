@@ -5,13 +5,13 @@
     <title>Vuelin</title>
   </head>
   <body>
-    
+    {{promptWord}}
     <form method="post">
-      Select destination and introduce code.
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Submit</button>
+        Insert prompt including the word above
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
     </form>
-    
+       
   </body>
 </html>
