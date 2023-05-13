@@ -1,15 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
+from 
+
+def getCountries():
+    return ['Barcelona','Paris','London']
+
+def getPlayerNames():
+    return ['Laura', 'Marc', 'Paula','Pere', '...', '...','...','...','...','...']
 
 def index(request):
-    return HttpResponse("index")
+    return render(request,"index.html")
 
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
+def gameCreator(request):
+    countries = getCountries()
+    context = {"countries": countries}
+    return render(request,'gameCreator.html',context)
 
-def results(request, question_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % question_id)
+def waitingRoomHost(request):
+    players = getPlayerNames()
+    context = {"players": players}
+    return render(request,'waitingRoomHost.html',context)
 
 def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
