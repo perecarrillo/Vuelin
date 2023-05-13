@@ -15,6 +15,11 @@ class Host:
         self.gameCode = str()
         self.resultat = dict()
         self.round = int()
+        self.paraulesPais = {
+            "France" : ["Torre Eiffel", "París", "ciudad del amor"],
+            "Spain" : ["Sevilla", "paella", "Barcelona", "Sagrada Família"]
+        }
+        self.paraula = str()
     
     def getMacAddress(self):
         pass
@@ -63,7 +68,13 @@ while not start:
     time.sleep(2)
 
 #codi pagines 5-final
+# un cop es dona play
+# escull una paraula random del pais
+host.paraula = choice(host.paraulesPais[host.getDestination])
+for p in host.players:
+    p.setParaula(choice(host.paraulesPais[host.getDestination]))
 
+while not 
 
 
 
