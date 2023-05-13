@@ -8,7 +8,7 @@ class Host:
     def __init__(self):
         self.mac = self.getMacAddress()
         self.server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
-        server.bind((self.mac, 4))
+        self.server.bind((self.mac, 4))
         self.players = []
         self.name = str()
         self.destination = str()
@@ -17,14 +17,26 @@ class Host:
         self.round = int()
     
     def getMacAddress(self):
-        pass
+        return "c8:b2:9b:1a:74:b1"
 
     def listenForPlayers(self):
-        pass
+        while True:
+            self.server.listen(10)
+            player, addr = self.server.accept()
+            roomNumber = player.recv(4096)
+            if (roomNumber == self.gameCode): 
+                self.players.append(Player(player, addr))
+                print(str(addr) + "accepted!")
+            else:
+                print(str(addr) + "rejected!")
+                player.close()
 
     def sendPlayerNamesToEveryone(self):
         for p in self.players:
-            p.send(",".join(x.getName() for x in self.players))
+            self.sendToPlayer(p, ",".join(x.getName() for x in self.players))
+
+    def sendToPlayer(self, player, message):
+        player.id.send(message.encode("utf-8"))
 
     def setDestination(self, name):
         self.destination = name
@@ -33,10 +45,10 @@ class Host:
         return self.destination
     
     def setGameCode(self, string):
-        self.gamecode = string
+        self.gameCode = string
 
     def getGameCode(self):
-        return self.gamecode
+        return self.gameCode
     
     def getNumPlayers(self):
         return len(self.players)
@@ -52,11 +64,8 @@ class Player:
         self.id = id
         self.addr = addr
 
-    def send(self, message):
-        self.id.send(message.encode("utf-8"))
-
 host = Host()
-th.start_new_thread(host.listenForPlayers, ("PlayerListener"))
+th.start_new_thread(host.listenForPlayers, ())
 
 while not start:
     host.sendPlayerNamesToEveryone()
@@ -67,22 +76,22 @@ while not start:
 
 
 
-server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
-server.bind(("c8:b2:9b:1a:74:b1", 4))
-server.listen(1)
+# server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
+# server.bind(("c8:b2:9b:1a:74:b1", 4))
+# server.listen(1)
 
-client, addr = server.accept()
+# client, addr = server.accept()
 
-try:
-    while True:
-        data = client.recv(1024)
-        if not data:
-            break
-        print(f"Message: {data.decode('utf-8')}")
-        message = input("Enter message:")
-        client.send(message.encode("utf-8"))
-except OSError as e:
-    pass
+# try:
+#     while True:
+#         data = client.recv(1024)
+#         if not data:
+#             break
+#         print(f"Message: {data.decode('utf-8')}")
+#         message = input("Enter message:")
+#         client.send(message.encode("utf-8"))
+# except OSError as e:
+#     pass
 
-client.close()
-server.close()
+# client.close()
+# server.close()
