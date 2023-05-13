@@ -1,6 +1,7 @@
 import socket as sc
 import _thread as th
 import time
+import random
 
 start = False
 
@@ -15,6 +16,10 @@ class Host:
         self.gameCode = "abc"
         self.resultat = dict()
         self.round = int()
+        self.paraulesPais = {
+            "France" : ["Torre Eiffel", "París", "ciudad del amor"],
+            "Spain" : ["Sevilla", "paella", "Barcelona", "Sagrada Família"]
+        }
     
     def getMacAddress(self):
         return "c8:b2:9b:1a:74:b1"
@@ -23,12 +28,17 @@ class Host:
         while True:
             self.server.listen(10)
             player, addr = self.server.accept()
-            roomNumber = (player.recv(4096)).decode("utf-8")
+            print("accepted, waiting for recv")
+            roomNumber = None
+            while not roomNumber:
+                roomNumber = (player.recv(4096)).decode("utf-8")
+                print(roomNumber)
+            print("recieved")
             if (roomNumber == self.gameCode): 
                 self.players.append(Player(player, addr))
                 print(str(addr) + " accepted!")
             else:
-                print(str(addr) + " rejected! " + roomNumber)
+                print(str(addr) + " rejecteed! " + roomNumber)
                 player.close()
 
     def sendPlayerNamesToEveryone(self):
@@ -59,6 +69,12 @@ class Host:
     def getRound(self):
         return self.round
     
+    def getPlayers(self):
+        result = []
+        for p in self.players:
+            result.append(p.id)
+        return result
+    
 class Player:
     def __init__(self, id, addr):
         self.id = id
@@ -75,7 +91,56 @@ while not start:
     time.sleep(2)
 
 #codi pagines 5-final
+numPlayers = len(host.players)
+# un cop es dona play
+# escull una paraula random del pais
+for p in host.players:
+    p.setParaula(choice(host.paraulesPais[host.getDestination]))
 
+contador = 0
+frases = []
+while contador < numPlayers:
+    fr = esperar_frase_inicial()
+    frases.append(fr)
+    contador = contador + 1
+
+llb = [1] * numPlayers
+for f in frases:
+    num = random.randint(0, numPlayers-1)
+    if llb[num]:
+        llb[num] = 0
+        players[num] = enviar_frase(num)
+
+it_frase = false
+for i in (1, numPlayers):
+    if it_frase:
+        contador = 0
+        frases = []
+        while contador < numPlayers:
+            fr, p = esperar_frase()
+            frases.append(fr)
+            contador = contador + 1
+        llb = [1] * numPlayers
+        for f in frases:
+            num = random.randint(0, numPlayers-1)
+            if llb[num]:
+                llb[num] = 0
+                players[num] = enviar_frase(num)
+        resultat
+    else:
+        contador = 0
+        imatges = []
+        while contador < numPlayers:
+            im, p = esperar_imatge()
+            imatges.append(im)
+            contador = contador + 1
+        llb = [1] * numPlayers
+        for j in imatges:
+            num = random.randint(0, numPlayers-1)
+            if llb[num]:
+                llb[num] = 0
+                players[num] = enviar_imatge(num)
+    it_frase = not it_frase
 
 
 
