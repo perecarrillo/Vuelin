@@ -1,6 +1,6 @@
 import socket as sc
 
-class Player:
+class PlayerController:
     def __init__(self):
         pass
         
