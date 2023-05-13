@@ -5,6 +5,7 @@ import random
 
 start = False
 
+
 class Host:
     def __init__(self):
         self.mac = self.getMacAddress()
