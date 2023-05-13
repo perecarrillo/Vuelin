@@ -20,6 +20,8 @@ class Host:
             "France" : ["Torre Eiffel", "París", "ciudad del amor"],
             "Spain" : ["Sevilla", "paella", "Barcelona", "Sagrada Família"]
         }
+        self.frasesInicials = []
+        self.historial = []
     
     def getMacAddress(self):
         return "c8:b2:9b:1a:74:b1"
@@ -81,7 +83,7 @@ class Player:
         self.addr = addr
     
     def getName(self):
-        return str(self.addr)
+        return "Hey "
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
@@ -95,24 +97,26 @@ numPlayers = len(host.players)
 # un cop es dona play
 # escull una paraula random del pais
 for p in host.players:
-    p.setParaula(choice(host.paraulesPais[host.getDestination]))
+    p.setParaula(random.choice(host.paraulesPais[host.getDestination]))
 
 contador = 0
-frases = []
 while contador < numPlayers:
     fr = esperar_frase_inicial()
-    frases.append(fr)
+    host.frasesInicials.append(fr)
     contador = contador + 1
 
 llb = [1] * numPlayers
-for f in frases:
+for f in host.frasesInicials:
     num = random.randint(0, numPlayers-1)
-    if llb[num]:
-        llb[num] = 0
-        players[num] = enviar_frase(num)
+    while not llb[num]:
+        num = random.randint(0, numPlayers-1)
+    llb[num] = 0
+    host.players[num].enviar_frase(f)
 
-it_frase = false
-for i in (1, numPlayers):
+it_frase = False
+frasesAnt = host.frasesInicials
+imatgesAnt = []
+for i in (0, numPlayers-1):
     if it_frase:
         contador = 0
         frases = []
@@ -123,10 +127,11 @@ for i in (1, numPlayers):
         llb = [1] * numPlayers
         for f in frases:
             num = random.randint(0, numPlayers-1)
-            if llb[num]:
-                llb[num] = 0
-                players[num] = enviar_frase(num)
-        resultat
+            while not llb[num]:
+                num = random.randint(0, numPlayers-1)
+            llb[num] = 0
+            host.players[num] = enviar_frase(f)
+        host.historial.append()
     else:
         contador = 0
         imatges = []
@@ -137,9 +142,11 @@ for i in (1, numPlayers):
         llb = [1] * numPlayers
         for j in imatges:
             num = random.randint(0, numPlayers-1)
-            if llb[num]:
-                llb[num] = 0
-                players[num] = enviar_imatge(num)
+            while not llb[num]:
+                num = random.randint(0, numPlayers-1)
+            llb[num] = 0
+            host.players[num] = enviar_imatge(j)
+            imatgesAnt[num] = 
     it_frase = not it_frase
 
 
