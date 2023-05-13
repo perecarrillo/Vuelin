@@ -10,6 +10,37 @@ playerNames = client.recv(4096).decode("utf-8").split(";")
 
 print(playerNames)
 
+class Client:
+    def __init__(self):
+        self.host = str()
+        self.nom = str()
+        self.adr = str()
+        self.gameCode = str()
+
+    def getHost(self):
+        return self.host
+    
+    def setHost(self, h):
+        self.host = h
+    
+    def setNom(self, name):
+        self.nom = name
+
+    def getNom(self):
+        return self.nom
+    
+    def setAdr(self, a):
+        self.adr = a
+
+    def getAdr(self):
+        return self.adr
+
+    def getGameCode(self):
+        return self.gameCode
+    
+    def getPlayers(self):
+        return host.getPlayers()
+
 
 client.close()
 
