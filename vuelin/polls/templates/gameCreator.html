@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vuelin</title>
+  </head>
+  <body>
+    
+    <label>Choose a destination:</label> <br>
+
+    <select>
+        {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+        {% endfor %}
+    </select> 
+
+    <a href="/polls/waitingRoomHost/">Next</a>
+       
+  </body>
+</html>
