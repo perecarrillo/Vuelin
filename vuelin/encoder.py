@@ -1,3 +1,5 @@
+from PIL import Image
+from io import BytesIO
 
 def stringToBool(msg) -> bool:
     if msg == "0": return False
@@ -6,11 +8,11 @@ def stringToBool(msg) -> bool:
 def stringToInt(msg) -> int:
     return int(msg)
 
-def jpgToString(msg) -> str:
-    return "photo hehe"
+def jpgToByteArray(msg):
+    return bytearray(msg.tobytes())
 
-def stringToJpg(msg):
-    return None # Yo que se
+def ByteArrayToJpg(msg):
+    return Image.frombytes("RGB", (476, 588), msg)
 
 def stringToArray(msg):
     return msg.split(";")

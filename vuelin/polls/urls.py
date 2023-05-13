@@ -11,4 +11,6 @@ urlpatterns = [
     path("waitingRoomHost/", views.waitingRoomHost, name="waitingRoomHost"),
     path("waitingRoomPlayer/", views.waitingRoomPlayer, name="waitingRoomPlayer"),
     path("writePrompt/", views.writePrompt, name="writePrompt"),
+    path("playerNameInput/", views.playerNameInput, name="playerNameInput"),
+    path("canvas/", views.canvas, name="canvas"),
 ]
