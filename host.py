@@ -12,7 +12,7 @@ class Host:
         self.players = []
         self.name = str()
         self.destination = str()
-        self.gameCode = str()
+        self.gameCode = "abc"
         self.resultat = dict()
         self.round = int()
         self.paraulesPais = {
@@ -28,17 +28,17 @@ class Host:
         while True:
             self.server.listen(10)
             player, addr = self.server.accept()
-            roomNumber = player.recv(4096)
+            roomNumber = (player.recv(4096)).decode("utf-8")
             if (roomNumber == self.gameCode): 
                 self.players.append(Player(player, addr))
-                print(str(addr) + "accepted!")
+                print(str(addr) + " accepted!")
             else:
-                print(str(addr) + "rejected!")
+                print(str(addr) + " rejected!")
                 player.close()
 
     def sendPlayerNamesToEveryone(self):
         for p in self.players:
-            self.sendToPlayer(p, ",".join(x.getName() for x in self.players))
+            self.sendToPlayer(p, ";".join(x.getName() for x in self.players))
 
     def sendToPlayer(self, player, message):
         player.id.send(message.encode("utf-8"))
@@ -68,6 +68,9 @@ class Player:
     def __init__(self, id, addr):
         self.id = id
         self.addr = addr
+    
+    def getName(self):
+        return str(self.addr)
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
