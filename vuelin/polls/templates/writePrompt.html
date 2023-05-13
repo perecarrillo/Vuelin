@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vuelin</title>
+  </head>
+  <body>
+    {{promptWord}}
+    <form method="post">
+        Insert prompt including the word above
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+       
+  </body>
+</html>
