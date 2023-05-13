@@ -30,12 +30,17 @@ class Host:
         while True:
             self.server.listen(10)
             player, addr = self.server.accept()
-            roomNumber = (player.recv(4096)).decode("utf-8")
+            print("accepted, waiting for recv")
+            roomNumber = None
+            while not roomNumber:
+                roomNumber = (player.recv(4096)).decode("utf-8")
+                print(roomNumber)
+            print("recieved")
             if (roomNumber == self.gameCode): 
                 self.players.append(Player(player, addr))
                 print(str(addr) + " accepted!")
             else:
-                print(str(addr) + " rejected! " + roomNumber)
+                print(str(addr) + " rejecteed! " + roomNumber)
                 player.close()
 
     def sendPlayerNamesToEveryone(self):
@@ -78,7 +83,7 @@ class Player:
         self.addr = addr
     
     def getName(self):
-        return str(self.addr)
+        return "Hey"
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
