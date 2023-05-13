@@ -4,20 +4,20 @@ import time
 
 start = False
 
-
-
 class Host:
     def __init__(self):
         self.mac = self.getMacAddress()
         self.server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
         server.bind((self.mac, 4))
         self.players = []
+        self.name = str()
+        self.destination = str()
+        self.gameCode = str()
+        self.resultat = dict()
+        self.round = int()
     
     def getMacAddress(self):
         pass
-
-    def setGameName(self, num):
-        self.gameName = num
 
     def listenForPlayers(self):
         pass
@@ -25,6 +25,27 @@ class Host:
     def sendPlayerNamesToEveryone(self):
         for p in self.players:
             p.send(",".join(x.getName() for x in self.players))
+
+    def setDestination(self, name):
+        self.destination = name
+
+    def getDestination(self):
+        return self.destination
+    
+    def setGameCode(self, string):
+        self.gamecode = string
+
+    def getGameCode(self):
+        return self.gamecode
+    
+    def getNumPlayers(self):
+        return len(self.players)
+    
+    def setRound(self, num):
+        self.round = num
+    
+    def getRound(self):
+        return self.round
     
 class Player:
     def __init__(self, id, addr):
@@ -40,6 +61,10 @@ th.start_new_thread(host.listenForPlayers, ("PlayerListener"))
 while not start:
     host.sendPlayerNamesToEveryone()
     time.sleep(2)
+
+#codi pagines 5-final
+
+
 
 
 server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
