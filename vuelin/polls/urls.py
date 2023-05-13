@@ -9,6 +9,6 @@ urlpatterns = [
     path("gameCreator/", views.gameCreator, name="gameCreator"),
     # ex: /polls/5/results/
     path("waitingRoomHost/", views.waitingRoomHost, name="waitingRoomHost"),
-    # ex: /polls/5/vote/
-    path("<int:question_id>/vote/", views.vote, name="vote"),
+    path("waitingRoomPlayer/", views.waitingRoomPlayer, name="waitingRoomPlayer"),
+    path("writePrompt/", views.writePrompt, name="writePrompt"),
 ]
