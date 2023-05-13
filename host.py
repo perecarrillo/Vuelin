@@ -33,7 +33,7 @@ class Host:
                 self.players.append(Player(player, addr))
                 print(str(addr) + " accepted!")
             else:
-                print(str(addr) + " rejected!")
+                print(str(addr) + " rejected! " + roomNumber)
                 player.close()
 
     def sendPlayerNamesToEveryone(self):
