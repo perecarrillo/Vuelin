@@ -12,15 +12,15 @@ class PlayerController:
         self.name = name
         
     def connectToHost(self):
-        print("ConnectToHost")
+        #print("ConnectToHost")
         self.host = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
         self.host.connect(("c8:b2:9b:1a:74:b1", 4))
 
 
     def enterGame(self, name):
-        print("EnterGame " + str(name))
-        msg = "#Enter#" + name
-        self.host.send(msg.encode("utf-8"))
+        #print("EnterGame " + str(name))
+        #msg = "#Enter#" + name
+        self.host.send(name.encode("utf-8"))
 
 
     def getPlayerNames(self):
@@ -31,30 +31,30 @@ class PlayerController:
         self.host.close()
 
     def hasGameStarted(self):
-        msg = "#gameStarted?#"
-        self.host.send(msg.encode("utf-8"))
+        #msg = "#gameStarted?#"
+        #self.host.send(msg.encode("utf-8"))
         return e.stringToBool(self.host.recv(1024).decode("utf-8"))
     
     def getMyWord(self):
         return self.host.recv(1024).decode("utf-8")
     
     def setInitialQuote(self, string):
-        msg = "#Quote#" + string
-        self.host.send(msg.encode("utf-8"))
+        #msg = "#Quote#" + string
+        self.host.send(string.encode("utf-8"))
 
     def getRounds(self):
-        msg = "#NRounds?#"
-        self.host.send(msg.encode("utf-8"))
+        #msg = "#NRounds?#"
+        #self.host.send(msg.encode("utf-8"))
         return e.stringToInt(self.host.recv(1024).decode("utf-8"))
     
     def receiveSentence(self):
         return self.host.recv(4096).decode("utf-8")
     
     def sendPhoto(self, photo):
-        self.host.send(e.jpgToString(photo).encode("utf-8"))
+        self.host.send(e.jpgToByteArray(photo))
 
     def receivePhoto(self):
-        return e.StringToJpg(self.host.recv(4096).decode("utf-8"))
+        return e.ByteArrayToJpg(self.host.recv(4096))
     
     def sendSentence(self, string):
         self.host.send(string.encode("utf-8"))
