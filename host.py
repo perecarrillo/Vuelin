@@ -22,6 +22,7 @@ class Host:
         }
         self.frasesInicials = []
         self.historial = []
+        self.assignacions = {}
     
     def getMacAddress(self):
         return "c8:b2:9b:1a:74:b1"
@@ -77,6 +78,13 @@ class Host:
             result.append(p.id)
         return result
     
+    def filterFrases(self, visited, available):
+        
+        filtered = available
+        for i in visited:
+            filtered.pop(i)
+        
+    
 class Player:
     def __init__(self, id, addr):
         self.id = id
@@ -87,6 +95,9 @@ class Player:
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
+
+for p in host.players:
+    host.assignacions[p.getNom()] = []
 
 while not start:
     host.sendPlayerNamesToEveryone()
@@ -101,14 +112,16 @@ for p in host.players:
 
 contador = 0
 while contador < numPlayers:
-    fr = esperar_frase_inicial()
-    host.frasesInicials.append(fr)
+    #fr, p = esperar_frase_inicial()
+    fr, p = esperar_frase()
+    host.frasesInicials.append([fr, p])
     contador = contador + 1
 
 llb = [1] * numPlayers
 for f in host.frasesInicials:
-    num = random.randint(0, numPlayers-1)
+    num = (random.randint(0, numPlayers-1)) % numPlayers
     while not llb[num]:
+        num = (num + 1) % numPlayers
         num = random.randint(0, numPlayers-1)
     llb[num] = 0
     host.players[num].enviar_frase(f)
@@ -126,9 +139,9 @@ for i in (0, numPlayers-1):
             contador = contador + 1
         llb = [1] * numPlayers
         for f in frases:
-            num = random.randint(0, numPlayers-1)
+            num = (random.randint(0, numPlayers-1)) % numPlayers
             while not llb[num]:
-                num = random.randint(0, numPlayers-1)
+                num = (random.randint(0, numPlayers-1)) % numPlayers
             llb[num] = 0
             host.players[num] = enviar_frase(f)
         host.historial.append()
@@ -141,12 +154,12 @@ for i in (0, numPlayers-1):
             contador = contador + 1
         llb = [1] * numPlayers
         for j in imatges:
-            num = random.randint(0, numPlayers-1)
+            num = (random.randint(0, numPlayers-1)) % numPlayers
             while not llb[num]:
-                num = random.randint(0, numPlayers-1)
+                num = (random.randint(0, numPlayers-1)) % numPlayers
             llb[num] = 0
             host.players[num] = enviar_imatge(j)
-            imatgesAnt[num] = 
+        
     it_frase = not it_frase
 
 
