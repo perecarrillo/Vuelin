@@ -6,6 +6,11 @@ client.connect(("c8:b2:9b:1a:74:b1", 4))
 message = input("input game name:")
 message = client.send(message.encode("utf-8"))
 
+playerNames = client.recv(4096).decode("utf-8").split(";")
+
+print(playerNames)
+
+
 client.close()
 
 # try:
