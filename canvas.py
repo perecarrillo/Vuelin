@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.colorchooser import askcolor
-from PIL import Image, ImageTk
+from PIL import Image
 import customtkinter
 
 
