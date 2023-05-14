@@ -10,8 +10,7 @@ import playerController as pl
 
 pc = pl.PlayerController()
 rounds = 0
-# playerloco.enterGame("abc")
-
+global myPrompt
 def getCountries():
     return [('barcelona','Barcelona'),('paris','Paris'),('london','London')]
 
@@ -84,15 +83,18 @@ class PromptForm(forms.Form):
 
 prompt = "not defined"
 global word
+
 def writePrompt(request):
     global word
+    global myPrompt 
     print("write prompt")
     print(request.method)
     if request.method == 'POST':
         print("method")
         form = PromptForm(request.POST)
         if form.is_valid():
-            prompt = form.cleaned_data['prompt']            
+            prompt = form.cleaned_data['prompt']  
+            myPrompt = prompt         
             print(prompt)
             if word in prompt.upper():
                 print("valid")
@@ -146,10 +148,11 @@ def guessDrawing(request):
     return render(request,'guessDrawing.html',{'form': form, "user":username, "image": im})
 
 def results(request):
+    global myPrompt 
     images = getImages()
     guesses = getGuesses()
     context = {
-        "original_prompt": prompt,
+        "original_prompt": myPrompt,
         "images": images,
         "guesses":guesses 
     }
