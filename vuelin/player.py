@@ -1,4 +1,4 @@
-import vuelin.playerController as pl
+import playerController as pl
 import time
 
 pc = pl.PlayerController()
@@ -12,7 +12,7 @@ pc.enterGame("abc")
 
 while not pc.hasGameStarted():
     print(pc.getPlayerNames())
-    time.sleep(5)
+    time.sleep(2)
 
 # Game Starts
 
