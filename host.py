@@ -33,7 +33,7 @@ class Host:
             print("accepted, waiting for recv")
             roomNumber = None
             while not roomNumber:
-                roomNumber = (player.recv(4096)).decode("utf-8")
+                roomNumber = self.receiveFromPlayer(p)
                 print(roomNumber)
             print("recieved")
             if (roomNumber == self.gameCode): 
@@ -92,6 +92,15 @@ class Host:
     
     def getLastAssignacio(self, name):
         return self.assignacions[name][-1]
+    
+    def receiveImage(self, p):
+        return p.id.recv(4096).decode("utf-8")
+    
+    def receiveFromPlayer(self, p):
+        msg = None
+        while not msg:
+            msg = p.id.recv(4096).decode("utf-8")
+        return msg
 
     
 class Player:
@@ -100,8 +109,8 @@ class Player:
         self.addr = addr
     
     def getName(self):
-        self.id = "Hey"
-        return self.id
+        self.name = "Hey"
+        return self.name
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
@@ -118,16 +127,14 @@ numPlayers = len(host.players)
 # un cop es dona play
 # escull una paraula random del pais
 for i, p in enumerate(host.players):
-    p.setParaula(random.choice(host.paraulesPais[host.getDestination]))
+    p.setParaula(random.choice(host.paraulesPais[host.getDestination()]))
     host.assignacions[p.addr] = i
 
 
 # Crear frases inicials
 frases = [0] * numPlayers
 for p in host.players:
-    msg = None
-    while not msg:
-        msg = p.recv(4096).decode("utf-8")
+    msg = host.receiveFromPlayer(p)
     idxFrase = host.getLastAssignacio(p.addr)
     frases[idxFrase] = msg
 host.historial.append(frases)
@@ -154,10 +161,8 @@ for i in range (1, numPlayers): #numero de rondes
         if it_frase:
             msg = host.receiveImage(p)
         else:
-            msg = None
-            while not msg:
-                msg = p.recv(4096).decode("utf-8")
-        idxFrase = host.getLastAssignacio(p.getName())
+            msg = host.receiveFromPlayer(p)
+        idxFrase = host.getLastAssignacio(p.addr)
         output[idxFrase] = msg
     host.historial.append(output)
     it_frase = not it_frase
