@@ -182,7 +182,7 @@ section{
     <script>
       function myFunction() {
         const link = document.createElement("a"); // creating <a> element
-        link.download = `canvas.jpg`; // passing current date as link download value
+        link.download = `../canvas/canva.jpg`; // passing current date as link download value
         link.href = canvas.toDataURL(); // passing canvasData as link href value
         link.click(); // clicking link to download image
       }
@@ -208,11 +208,14 @@ section{
       }
     }, 1000);
     </script>
+    <meta http-equiv="refresh" content="30;url={{ redirect_url }}">
   </head>
   <body style="background-color:#FFCC00;">
+
+    
     <div class="container">
+      <span id="demo">30</span> {{sentence}}
       <section class="tools-board">
-        
         <div class="row">
           <label class="title">Options</label>
           <ul class="options">
