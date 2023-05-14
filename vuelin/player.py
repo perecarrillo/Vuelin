@@ -25,7 +25,7 @@ initialQuote = input("Input your initial sentence, it must contain the word " + 
 pc.setInitialQuote(initialQuote)
 
 quoteRound = False # cert si et toca escriure
-print("entro")
+print("entro", rounds)
 for i in range(rounds):
     if quoteRound:
         print("EscriureFrase")
