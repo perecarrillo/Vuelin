@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
@@ -7,7 +8,9 @@
   <body>
       <p>{{original_prompt}}</p>
       
-      <img src="{{images}}" alt="">
-        {{guesses}}
+      <img src="{% static 'imageVuelin.png' %}" alt="My Image">
+      <p>{{guesses}}</p>
+
+        <a href="/polls">Main menu</a>
   </body>
 </html>

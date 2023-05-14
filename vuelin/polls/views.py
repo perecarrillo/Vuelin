@@ -124,15 +124,14 @@ def playerNameInput(request):
     return render(request,'playerNameInput.html',{'form': form})
 
 def canvas(request):    
-    return render(request,"canvas.html",{'redirect_url': '/polls', "prompt": prompt})
+    sentence = pc.receiveSentence()   
+    return render(request,"canvas.html",{'redirect_url': '/polls/guessDrawing', "sentence": sentence})
 
 class GuessingForm(forms.Form):
     guess = forms.CharField(max_length=50,label='')
 
 def guessDrawing(request):
     im = getImage()
-    auth = getAuthor()
-    new_prompt = getOtherPrompt()
 
     username = request.user
     print(username)
