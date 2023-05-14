@@ -38,7 +38,7 @@ section{
   display: flex;
   justify-content: space-between;
   width: 80%;
-  padding: 15px 22px 0;
+  padding: 5px 5px 0;
   flex-direction: row;
 }
 .tools-board .row{
@@ -67,6 +67,7 @@ section{
   padding-left: 10px;
   align-items: end;
   display: flex;
+  padding-right: 10px;
 }
 
 .option:is(:hover, .active) img{
@@ -75,7 +76,7 @@ section{
 .option :where(span, label){
   color: #5A6168;
   cursor: pointer;
-  padding-left: 10px;
+  padding-left: 0px;
 }
 .option:is(:hover, .active) :where(span, label){
   color: #4A98F7;
@@ -155,6 +156,7 @@ section{
   color: #6C757D;
   border: 1px solid #6C757D;
   transition: all 0.3s ease;
+  min-width: 70px;
 }
 .clear-canvas:hover{
   color: #fff;
