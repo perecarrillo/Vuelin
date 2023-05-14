@@ -61,6 +61,8 @@ def waitingRoomPlayer(request):
 class PromptForm(forms.Form):
     prompt = forms.CharField(max_length=50,label='')
 
+prompt = "not defined"
+
 def writePrompt(request):
     word = getPromptWord().upper()
     if request.method == 'POST':
@@ -80,7 +82,6 @@ class PlayerNameForm(forms.Form):
     name = forms.CharField(max_length=50,label='')
 
 def playerNameInput(request):
-    word = getPromptWord()
     if request.method == 'POST':
         form = PlayerNameForm(request.POST)
         if form.is_valid():
@@ -91,5 +92,5 @@ def playerNameInput(request):
         form = PlayerNameForm()
     return render(request,'playerNameInput.html',{'form': form})
 
-def canvas(request):
-    return render(request,"canvas.html",{'redirect_url': '/polls'})
+def canvas(request):    
+    return render(request,"canvas.html",{'redirect_url': '/polls', "prompt": prompt})
