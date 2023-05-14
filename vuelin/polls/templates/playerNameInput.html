@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Vuelin</title>
     <style>
+<<<<<<< HEAD
         html{
             min-height: 100vh;
             display: flex;
@@ -68,12 +69,36 @@
         button:hover{
             background-color: #333333;
         }
+=======
+      html{
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      body{
+        margin: auto;
+        width: 50%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;   
+      }
+      form {
+        font-family: Comic Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        margin-bottom: 40px;
+      }
+      button {
+        padding: 5px 15px;
+      }
+>>>>>>> be7221d4f0c84a108b5927fcf3c9fdab0975595e
       </style>
   </head>
   <body>
     
     <form method="post">
-        Insert your name:
+        Insert your name
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" id="next-btn">Next</button>

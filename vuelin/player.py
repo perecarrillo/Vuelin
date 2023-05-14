@@ -1,4 +1,4 @@
-import vuelin.playerController as pl
+import playerController as pl
 import time
 
 pc = pl.PlayerController()
@@ -10,9 +10,14 @@ pc.connectToHost()
 
 pc.enterGame("abc")
 
+
+rounds = 0
 while not pc.hasGameStarted():
-    print(pc.getPlayerNames())
-    time.sleep(5)
+    pn = pc.getPlayerNames()
+    rounds = len(pc.getPlayerNames())-1
+    print(pn)
+    time.sleep(2)
+
 
 # Game Starts
 
@@ -20,22 +25,25 @@ initialQuote = input("Input your initial sentence, it must contain the word " + 
 # Comprovar prompt
 pc.setInitialQuote(initialQuote)
 
-rounds = pc.getRounds()
-quoteRound = True
+quoteRound = False # cert si et toca escriure
+print("entro", rounds)
 for i in range(rounds):
     if quoteRound:
+        print("EscriureFrase")
+        photo = pc.receivePhoto()
+        showPhoto(photo)
+        sentence = input("Write a sentence that describes this photo: ")
+        pc.sendSentence(sentence)
+        
+    else: 
+        print("Dibuixar")
         sentence = pc.receiveSentence()
         print("Draw this: " + sentence)
 
         photo = readPhoto()
         pc.sendPhoto(photo)
 
-    else: 
-        photo = pc.receivePhoto()
-        showPhoto(photo)
-        sentence = input("Write a sentence that describes this photo: ")
-        pc.sendSentence(sentence)
-
+print("surto")
 # Game has finished
 
 hist = pc.getHistory()
