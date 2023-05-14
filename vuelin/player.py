@@ -11,13 +11,12 @@ pc.connectToHost()
 pc.enterGame("abc")
 
 
-rounds = 0
 while not pc.hasGameStarted():
     pn = pc.getPlayerNames()
-    rounds = len(pc.getPlayerNames())-1
     print(pn)
     time.sleep(2)
 
+rounds = len(pc.getPlayerNames())-1
 
 # Game Starts
 

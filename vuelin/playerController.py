@@ -58,6 +58,14 @@ class PlayerController:
     def receiveSentence(self):
         return self.receiveFrom(self.host)
     
+    def sendMovedPhoto(self):
+        import glob
+        import os
+
+        list_of_files = glob.glob('%userprofile%\downloads/*') # * means all if need specific format then *.csv
+        latest_file = max(list_of_files, key=os.path.getctime)
+        self.host.send(e.jpgToByteArray(latest_file))
+    
     def sendPhoto(self, photo):
         self.host.send(e.jpgToByteArray(photo))
 
