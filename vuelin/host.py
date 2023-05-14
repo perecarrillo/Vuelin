@@ -97,6 +97,14 @@ class Host:
     def receiveImage(self, p):
         return p.id.recv(4096).decode("utf-8")
     
+    def receiveImageAndSend(self):
+
+        img1 = host.players[0].id.recv(1000000)
+        img2 = host.players[1].id.recv(1000000)
+
+        self.players[1].id.send(img1)
+        self.players[0].id.send(img2)
+    
     def receiveFromPlayer(self, p):
         msg = None
         while not msg:
@@ -160,16 +168,37 @@ for i, p in enumerate(host.players):
 
 # Crear frases inicials
 frases = [0] * numPlayers
+mapa = {}
 for p in host.players:
     print("receiving from ", p.addr)
     msg = host.receiveFromPlayer(p)
     print("received ", msg)
     idxFrase = host.getLastAssignacio(p.addr)
     frases[idxFrase] = msg
+    mapa[p.addr] = msg
 host.historial.append(frases)
 
 it_frase = False # cert si et toca escriure frase
 cont = 0
+
+host.sendToPlayer(host.players[0], mapa[host.players[1].addr])
+host.sendToPlayer(host.players[1], mapa[host.players[0].addr])
+
+host.receiveImageAndSend()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print("numPlayers: ", numPlayers)
 for i in range (1, numPlayers): #numero de rondes
     # if it_frase:
@@ -180,6 +209,10 @@ for i in range (1, numPlayers): #numero de rondes
         frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
         num = (random.randint(0, len(frases) - 1))
         #print(len(frases))
+        print("frases ", frases)
+        print("frasesDisponibles ", frasesDisponibles)
+        print("num ", num)
+        print("Hist ", host.historial)
         frasesDisponibles.pop(frases[num])
         if it_frase:
             host.sendToPlayer(p, host.historial[-1][num])
@@ -198,3 +231,6 @@ for i in range (1, numPlayers): #numero de rondes
         output[idxFrase] = msg
     host.historial.append(output)
     it_frase = not it_frase
+
+while True:
+    pass

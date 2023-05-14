@@ -59,13 +59,24 @@ class PlayerController:
         return self.receiveFrom(self.host)
     
     def sendMovedPhoto(self):
-        import glob
-        import os
+        import shutil
+        shutil.move("C:/Users/marco/Downloads/canvas.jpg", "./polls/static/canvas.jpg")
+        shutil.move("home/mvalls/Downloads/canvas.jpg", "./polls/static/canvas.jpg")
+        print("Photo moved")
 
-        list_of_files = glob.glob('%userprofile%\downloads/*') # * means all if need specific format then *.csv
-        latest_file = max(list_of_files, key=os.path.getctime)
-        self.host.send(e.jpgToByteArray(latest_file))
-    
+        from PIL import Image
+
+        image = Image.open("./polls/static/canvas.jpg")
+
+        self.host.send(bytearray(image))
+
+        img = self.host.recv(1000000)
+
+        import PIL.Image as I
+        im = I.fromarray(img)
+        im.save("./polls/static/canvas.jpg")
+
+
     def sendPhoto(self, photo):
         self.host.send(e.jpgToByteArray(photo))
 
