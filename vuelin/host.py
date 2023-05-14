@@ -116,11 +116,13 @@ class Player:
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
 
+host.setDestination("Spain")
+
 for p in host.players:
     host.assignacions[p.addr] = []
 
 start = 10
-while start > 0:
+while input(":") != "n":
     for p in host.players:
         msg = p.id.recv(4096).decode("utf-8")
         if msg == "#GetPlayerNames#":
@@ -128,6 +130,7 @@ while start > 0:
         elif msg == "#gameStarted?#":
             host.sendToPlayer(p, "0")
     time.sleep(2)
+    print("iteration")
     start -= 1
 
 for p in host.players:
@@ -146,7 +149,7 @@ numPlayers = len(host.players)
 # escull una paraula random del pais
 for i, p in enumerate(host.players):
     host.sendToPlayer(p, random.choice(host.paraulesPais[host.getDestination()]))
-    host.assignacions[p.addr] = i
+    host.assignacions[p.addr] = [i]
 
 
 # Crear frases inicials
