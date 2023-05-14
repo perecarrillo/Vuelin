@@ -1,4 +1,4 @@
-import vuelin.playerController as pl
+import playerController as pl
 import time
 
 pc = pl.PlayerController()
