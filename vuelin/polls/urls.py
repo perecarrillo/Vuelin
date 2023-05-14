@@ -13,4 +13,5 @@ urlpatterns = [
     path("writePrompt/", views.writePrompt, name="writePrompt"),
     path("playerNameInput/", views.playerNameInput, name="playerNameInput"),
     path("canvas/", views.canvas, name="canvas"),
+    path("guessDrawing/", views.guessDrawing, name="guessDrawing"),
 ]
