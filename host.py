@@ -107,7 +107,7 @@ host = Host()
 th.start_new_thread(host.listenForPlayers, ())
 
 for p in host.players:
-    host.assignacions[p.getNom()] = []
+    host.assignacions[p.addr] = []
 
 while not start:
     host.sendPlayerNamesToEveryone()
@@ -119,26 +119,18 @@ numPlayers = len(host.players)
 # escull una paraula random del pais
 for i, p in enumerate(host.players):
     p.setParaula(random.choice(host.paraulesPais[host.getDestination]))
-    host.assignacions[p.getName()] = i
+    host.assignacions[p.addr] = i
 
 
 # Crear frases inicials
-contador = 0
 frases = [0] * numPlayers
-while contador < numPlayers:
-    fr, p = esperar_frase()
-    idxFrase = host.getLastAssignacio(p.getName())
-    frases[idxFrase] = fr
-    contador += 1
+for p in host.players:
+    msg = None
+    while not msg:
+        msg = p.recv(4096).decode("utf-8")
+    idxFrase = host.getLastAssignacio(p.addr)
+    frases[idxFrase] = msg
 host.historial.append(frases)
-
-# frasesDisponibles = list(range(numPlayers))
-# for p in host.players:
-#     frases = host.filterFrases([], frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
-#     num = (random.randint(len(frases)))
-#     frasesDisponibles.remove(num)
-#     p.enviar_frase(host.frasesInicials[num][0])
-
 
 it_frase = False
 cont = 0
@@ -146,48 +138,26 @@ for i in range (1, numPlayers): #numero de rondes
     # if it_frase:
     frasesDisponibles = list(range(numPlayers))
     for p in host.players:
-        visited = host.assignacions[p.getName()]
+        visited = host.assignacions[p.addr]
         frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
         num = (random.randint(len(frases)))
         frasesDisponibles.remove(num)
         if it_frase:
-            p.enviar_frase(host.assignacions[-1])
+            host.sendToPlayer(p, host.assignacions[-1])
         else:
-            p.enviar_draw(host.assignacions[-1])
+            host.sendToPlayer(p, host.assignacions[-1])
         visited.append(num)
-        host.assignacions[p.getName()] = visited
+        host.assignacions[p.addr] = visited
 
-    contador = 0
     output = [0] * numPlayers
-    while contador < numPlayers:
+    for p in host.players:
         if it_frase:
-            o, p = esperar_draw()
+            msg = host.receiveImage(p)
         else:
-            o, p = esperar_frase()
+            msg = None
+            while not msg:
+                msg = p.recv(4096).decode("utf-8")
         idxFrase = host.getLastAssignacio(p.getName())
-        output[idxFrase] = o
-        contador += 1
+        output[idxFrase] = msg
     host.historial.append(output)
-
     it_frase = not it_frase
-
-
-# server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
-# server.bind(("c8:b2:9b:1a:74:b1", 4))
-# server.listen(1)
-
-# client, addr = server.accept()
-
-# try:
-#     while True:
-#         data = client.recv(1024)
-#         if not data:
-#             break
-#         print(f"Message: {data.decode('utf-8')}")
-#         message = input("Enter message:")
-#         client.send(message.encode("utf-8"))
-# except OSError as e:
-#     pass
-
-# client.close()
-# server.close()
