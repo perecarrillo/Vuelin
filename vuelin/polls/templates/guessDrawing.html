@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vuelin</title>
+
+    <style>
+
+html{
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        background-color: #FFCC00;
+    }
+    body{
+        margin: auto;
+        width: 50%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;             
+    }
+    input{
+        width: 60%;
+        font-size: 16px;
+        line-height: 1.5;
+        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+        border: none;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 5px;
+        padding: .5em 1em .5em 1em;
+        margin-bottom: 0px;
+    }
+    input:focus{
+        outline: none;
+    }
+    button{
+        margin: 10px;
+        padding: 12px 12px;
+
+        cursor: pointer;
+        user-select: none;
+        transition: all 150ms linear;
+        text-align: center;
+        white-space: nowrap;
+        text-decoration: none !important;
+        text-transform: none;
+        text-transform: capitalize;
+
+        color: #fff;
+        border: 0 none;
+        border-radius: 50px;
+        background-color: #4D4D4D;
+
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.3;
+
+        -webkit-appearance: none;
+        -moz-appearance:    none;
+        appearance:         none;
+        
+        justify-content: center;
+        align-items: center;
+        flex: 0 0 160px;
+    }
+    button:hover{
+        background-color: #333333;
+    }
+    </style>
+  </head>
+  <body>
+    
+    <img src="{% static 'imageVuelin.png' %}" alt="My Image">
+
+    <form method="post">
+        What's your guess?
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="next-btn">Submit</button>
+    </form>
+       
+  </body>
+</html>
