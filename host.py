@@ -5,22 +5,21 @@ import random
 
 start = False
 
+
 class Host:
     def __init__(self):
         self.mac = self.getMacAddress()
         self.server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
         self.server.bind((self.mac, 4))
-        self.players = []
+        self.players = [] #array de players
         self.name = str()
         self.destination = str()
         self.gameCode = "abc"
-        self.resultat = dict()
         self.round = int()
         self.paraulesPais = {
             "France" : ["Torre Eiffel", "París", "ciudad del amor"],
             "Spain" : ["Sevilla", "paella", "Barcelona", "Sagrada Família"]
         }
-        self.frasesInicials = []
         self.historial = []
         self.assignacions = {}
     
@@ -30,19 +29,20 @@ class Host:
     def listenForPlayers(self):
         while True:
             self.server.listen(10)
-            player, addr = self.server.accept()
+            p, addr = self.server.accept()
+            player = Player(p, addr)
             print("accepted, waiting for recv")
             roomNumber = None
             while not roomNumber:
-                roomNumber = (player.recv(4096)).decode("utf-8")
+                roomNumber = self.receiveFromPlayer(player)
                 print(roomNumber)
             print("recieved")
             if (roomNumber == self.gameCode): 
-                self.players.append(Player(player, addr))
+                self.players.append(player)
                 print(str(addr) + " accepted!")
             else:
                 print(str(addr) + " rejecteed! " + roomNumber)
-                player.close()
+                player.id.close()
 
     def sendPlayerNamesToEveryone(self):
         for p in self.players:
@@ -79,10 +79,30 @@ class Host:
         return result
     
     def filterFrases(self, visited, available):
-        
-        filtered = available
+        filtered = [1] * list(range(len(self.players)))
+        filtered2 = [0] * list(range(len(self.players)))
         for i in visited:
-            filtered.pop(i)
+            filtered[i] = 0
+        for i in available:
+            filtered2[i] = 1
+        resultat = []
+        for i in range(len(self.players)):
+            if filtered[i] and filtered2[i]:
+                resultat.append(i)
+        return resultat
+    
+    def getLastAssignacio(self, name):
+        return self.assignacions[name][-1]
+    
+    def receiveImage(self, p):
+        return p.id.recv(4096).decode("utf-8")
+    
+    def receiveFromPlayer(self, p):
+        msg = None
+        while not msg:
+            msg = p.id.recv(4096).decode("utf-8")
+        return msg
+
     
 class Player:
     def __init__(self, id, addr):
@@ -90,14 +110,14 @@ class Player:
         self.addr = addr
     
     def getName(self):
-        return "Hey "
-
+        self.name = "Hey"
+        return self.name
 
 host = Host()
 th.start_new_thread(host.listenForPlayers, ())
 
 for p in host.players:
-    host.assignacions[p.getNom()] = []
+    host.assignacions[p.addr] = []
 
 while not start:
     host.sendPlayerNamesToEveryone()
@@ -107,79 +127,43 @@ while not start:
 numPlayers = len(host.players)
 # un cop es dona play
 # escull una paraula random del pais
-for p in host.players:
-    p.setParaula(random.choice(host.paraulesPais[host.getDestination]))
+for i, p in enumerate(host.players):
+    host.sendToPlayer(p, random.choice(host.paraulesPais[host.getDestination()]))
+    host.assignacions[p.addr] = i
 
-for p in host.players:
-    msg = None
-    while not msg:
-        msg = p.recv(4096).decode("utf-8")
-    host.frasesInicials.append([msg, p])
 
-llb = [1] * numPlayers
-for f in host.frasesInicials:
-    num = (random.randint(0, numPlayers-1)) % numPlayers
-    while not llb[num]:
-        num = (num + 1) % numPlayers
-        num = random.randint(0, numPlayers-1)
-    llb[num] = 0
-    host.sendToPlayer(host.players[num], f)
+# Crear frases inicials
+frases = [0] * numPlayers
+for p in host.players:
+    msg = host.receiveFromPlayer(p)
+    idxFrase = host.getLastAssignacio(p.addr)
+    frases[idxFrase] = msg
+host.historial.append(frases)
 
 it_frase = False
-frasesAnt = host.frasesInicials
-imatgesAnt = []
-for i in (0, numPlayers-1):
-    if it_frase:
-        frases = []
-        for p in host.players:
-            msg = None
-            while not msg:
-                msg = p.recv(4096).decode("utf-8")
-            frases.append(msg)
+cont = 0
+for i in range (1, numPlayers): #numero de rondes
+    # if it_frase:
+    frasesDisponibles = list(range(numPlayers))
+    for p in host.players:
+        visited = host.assignacions[p.addr]
+        frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
+        num = (random.randint(len(frases)))
+        frasesDisponibles.remove(num)
+        if it_frase:
+            host.sendToPlayer(p, host.assignacions[-1])
+        else:
+            host.sendToPlayer(p, host.assignacions[-1])
+        visited.append(num)
+        host.assignacions[p.addr] = visited
 
-        llb = [1] * numPlayers
-        for f in frases:
-            num = (random.randint(0, numPlayers-1)) % numPlayers
-            while not llb[num]:
-                num = (random.randint(0, numPlayers-1)) % numPlayers
-            llb[num] = 0
-            host.sendToPlayer(host.players[num], f)
-        host.historial.append()
-    else:
-        contador = 0
-        imatges = []
-        while contador < numPlayers:
-            im, p = esperar_imatge()
-            imatges.append(im)
-            contador = contador + 1
-        llb = [1] * numPlayers
-        for j in imatges:
-            num = (random.randint(0, numPlayers-1)) % numPlayers
-            while not llb[num]:
-                num = (random.randint(0, numPlayers-1)) % numPlayers
-            llb[num] = 0
-            host.players[num] = enviar_imatge(j)
-        
+    output = [0] * numPlayers
+    for p in host.players:
+        if it_frase:
+            msg = host.receiveImage(p)
+        else:
+            msg = host.receiveFromPlayer(p)
+        idxFrase = host.getLastAssignacio(p.addr)
+        output[idxFrase] = msg
+    host.historial.append(output)
     it_frase = not it_frase
-
-
-
-# server = sc.socket(sc.AF_BLUETOOTH, sc.SOCK_STREAM, sc.BTPROTO_RFCOMM)
-# server.bind(("c8:b2:9b:1a:74:b1", 4))
-# server.listen(1)
-
-# client, addr = server.accept()
-
-# try:
-#     while True:
-#         data = client.recv(1024)
-#         if not data:
-#             break
-#         print(f"Message: {data.decode('utf-8')}")
-#         message = input("Enter message:")
-#         client.send(message.encode("utf-8"))
-# except OSError as e:
-#     pass
-
-# client.close()
-# server.close()

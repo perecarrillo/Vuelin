@@ -1,5 +1,5 @@
 import socket as sc
-import encoder as e
+import vuelin.encoder as e
 
 class PlayerController:
     name : str
@@ -24,19 +24,25 @@ class PlayerController:
 
 
     def getPlayerNames(self):
-        return self.host.recv(4096).decode("utf-8").split(";")
+        return self.receiveFrom(self.host).split(";")
         
 
     def finish(self):
         self.host.close()
 
+    def receiveFrom(self, h):
+        msg = None
+        while not msg:
+            msg = h.recv(4096).decode("utf-8")
+        return msg
+
     def hasGameStarted(self):
-        #msg = "#gameStarted?#"
-        #self.host.send(msg.encode("utf-8"))
-        return e.stringToBool(self.host.recv(1024).decode("utf-8"))
+        msg = "#gameStarted?#"
+        self.host.send(msg.encode("utf-8"))
+        return e.stringToBool(self.receiveFrom(self.host))
     
     def getMyWord(self):
-        return self.host.recv(1024).decode("utf-8")
+        return self.receiveFrom(self.host)
     
     def setInitialQuote(self, string):
         #msg = "#Quote#" + string
@@ -45,19 +51,25 @@ class PlayerController:
     def getRounds(self):
         #msg = "#NRounds?#"
         #self.host.send(msg.encode("utf-8"))
-        return e.stringToInt(self.host.recv(1024).decode("utf-8"))
+        return e.stringToInt(self.receiveFrom(self.host))
     
     def receiveSentence(self):
-        return self.host.recv(4096).decode("utf-8")
+        return self.receiveFrom(self.host)
     
     def sendPhoto(self, photo):
         self.host.send(e.jpgToByteArray(photo))
 
+    def receiveFromRaw(h):
+        msg = None
+        while not msg:
+            msg = h.recv(4096)
+        return msg
+
     def receivePhoto(self):
-        return e.ByteArrayToJpg(self.host.recv(4096))
+        return e.ByteArrayToJpg(self.receiveFromRaw(self.host))
     
     def sendSentence(self, string):
         self.host.send(string.encode("utf-8"))
 
     def getHistory(self):
-        return e.stringToArray(self.host.recv(4096).decode("utf-8"))
+        return e.stringToArray(self.receiveFrom(self.host))
