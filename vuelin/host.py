@@ -168,8 +168,9 @@ for i in range (1, numPlayers): #numero de rondes
     for p in host.players:
         visited = host.assignacions[p.addr]
         frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
-        num = (random.randint(0, len(frases)))
-        frasesDisponibles.pop(num)
+        num = (random.randint(0, len(frases) - 1))
+        print(len(frases))
+        frasesDisponibles.remove(frases[num])
         if it_frase:
             host.sendToPlayer(p, host.historial[-1][num])
         else:

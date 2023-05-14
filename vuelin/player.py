@@ -14,7 +14,7 @@ rounds = 0
 
 while not pc.hasGameStarted():
     pn = pc.getPlayerNames()
-    rounds = max(rounds, len(pn))
+    rounds = len(pn)-1
     print(pn)
     time.sleep(2)
 
@@ -25,6 +25,7 @@ initialQuote = input("Input your initial sentence, it must contain the word " + 
 pc.setInitialQuote(initialQuote)
 
 quoteRound = False # cert si et toca escriure
+print("entro")
 for i in range(rounds):
     if quoteRound:
         print("EscriureFrase")
@@ -41,6 +42,7 @@ for i in range(rounds):
         photo = readPhoto()
         pc.sendPhoto(photo)
 
+print("surto")
 # Game has finished
 
 hist = pc.getHistory()
