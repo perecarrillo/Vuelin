@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Vuelin</title>
     <style>
-              html{
+      html{
         min-height: 100vh;
         display: flex;
         justify-content: center;
@@ -16,15 +16,22 @@
         text-align: center;
         margin-left: auto;
         margin-right: auto;
-        padding: 10px; 
-        
+        padding: 10px;   
+      }
+      form {
+        font-family: Comic Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        margin-bottom: 40px;
+      }
+      button {
+        padding: 5px 15px;
       }
       </style>
   </head>
   <body style="background-color:rgb(255, 255, 115);">
     
     <form method="post">
-        Insert your name:
+        Insert your name
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>

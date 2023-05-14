@@ -1,5 +1,5 @@
 import socket as sc
-import vuelin.encoder as e
+import encoder as e
 
 class PlayerController:
     name : str
