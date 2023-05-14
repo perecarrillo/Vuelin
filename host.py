@@ -127,7 +127,7 @@ numPlayers = len(host.players)
 # un cop es dona play
 # escull una paraula random del pais
 for i, p in enumerate(host.players):
-    p.setParaula(random.choice(host.paraulesPais[host.getDestination()]))
+    host.sendToPlayer(p, random.choice(host.paraulesPais[host.getDestination()]))
     host.assignacions[p.addr] = i
 
 
