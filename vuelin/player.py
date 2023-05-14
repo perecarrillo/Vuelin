@@ -10,8 +10,12 @@ pc.connectToHost()
 
 pc.enterGame("abc")
 
+rounds = 0
+
 while not pc.hasGameStarted():
-    print(pc.getPlayerNames())
+    pn = pc.getPlayerNames()
+    rounds = max(rounds, len(pn))
+    print(pn)
     time.sleep(2)
 
 # Game Starts
@@ -20,7 +24,6 @@ initialQuote = input("Input your initial sentence, it must contain the word " + 
 # Comprovar prompt
 pc.setInitialQuote(initialQuote)
 
-rounds = pc.getRounds()
 quoteRound = True
 for i in range(rounds):
     if quoteRound:
