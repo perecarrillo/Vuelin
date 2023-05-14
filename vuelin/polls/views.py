@@ -59,7 +59,7 @@ def waitingRoomPlayer(request):
         return render(request,'waitingRoomPlayer.html')
     
 class PromptForm(forms.Form):
-    prompt = forms.CharField(max_length=50)
+    prompt = forms.CharField(max_length=50,label='')
 
 def writePrompt(request):
     word = getPromptWord().upper()
@@ -77,7 +77,7 @@ def writePrompt(request):
     return render(request,'writePrompt.html',{"promptWord": word,'form': form})
 
 class PlayerNameForm(forms.Form):
-    name = forms.CharField(max_length=50)
+    name = forms.CharField(max_length=50,label='')
 
 def playerNameInput(request):
     word = getPromptWord()

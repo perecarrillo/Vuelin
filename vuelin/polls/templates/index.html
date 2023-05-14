@@ -5,41 +5,145 @@
     <title>Vuelin</title>
     <style>
       html{
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            background-color: #FFCC00;
+        }
       body{
-        margin: auto;
-        width: 50%;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 10px; 
-        
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background: #bbc3f7;
+        height: 90vh;        
       }
-      a {
-        display: block;
-        margin-bottom: 50px;
-        font-size: 20px;
-        text-align: center;
-        border: 3px solid black;
-        padding: 15px 20px;
-        background-color: rgb(180, 180, 242);
-        text-decoration: none;
-        border-radius: 15px;
-        font-family: Comic Arial, Helvetica, sans-serif;
-        font-size: 25px;
-        color: black;
-      }
+    /*Button Styles*/
+    .btn-cloud {
+      position: absolute;
+      padding: 0.7rem 2rem;
+      color: #ffffff;
+      background: #aac4e3;
+      border-radius: 100px 100px 100px 0;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 1px;
+      line-height: 2.188rem;
+      text-transform: uppercase;
+      text-decoration: none;
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+    }
+
+    .btn-cloud:hover, .btn-cloud:focus, .btn-cloud:active {
+      color: #ffffff;
+      border-radius: 45px;
+    }
+
+    .btn-cloud:after {
+      content: '';
+      width: 80px;
+      height: 50px;
+      background: #aac4e3;
+      position: absolute;
+      margin-top: -10px;
+      border-radius: 50px;
+      z-index: -1;
+      left: 18%;
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285);           
+      transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+    }
+
+    .btn-cloud:hover:after {
+      content: '';
+      margin-top: -35px;
+      height: 80px;
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+    }
+
+    .btn-cloud:before {
+      content: '';
+      width: 60px;
+      height: 50px;
+      border-radius: 50px;
+      margin-top: -10px;
+      background: #aac4e3;
+      position: absolute;
+      z-index: -1;
+      right: 20%;
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+    }
+
+    .btn-cloud:hover:before {
+      content: '';
+      margin-top: -30px;
+      height: 60px;
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition: all 500ms cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1); /* older webkit */
+      -webkit-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -moz-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      -o-transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); 
+      transition-timing-function: cubic-bezier(0.555, 0.645, 0.310, 1.285); /* custom */
+    }
     </style>
   </head>
   <body style="background-color:rgb(255, 255, 115);">
     
-      <a href="/polls/gameCreator/">New Game</a>
+      <!-- <a class="btn-cloud" href="/polls/gameCreator/">New Game</a> -->
 
-      <a href="/polls/playerNameInput/">Join Game</a>
+      <a class="btn-cloud" href="/polls/playerNameInput/">Join Game</a>
        
   </body>
 </html>
