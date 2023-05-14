@@ -1,5 +1,5 @@
 import socket as sc
-import vuelin.encoder as e
+import encoder as e
 
 class PlayerController:
     name : str
@@ -24,6 +24,8 @@ class PlayerController:
 
 
     def getPlayerNames(self):
+        msg = "#GetPlayerNames#"
+        self.host.send(msg.encode("utf-8"))
         return self.receiveFrom(self.host).split(";")
         
 

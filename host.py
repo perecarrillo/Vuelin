@@ -119,9 +119,26 @@ th.start_new_thread(host.listenForPlayers, ())
 for p in host.players:
     host.assignacions[p.addr] = []
 
-while not start:
-    host.sendPlayerNamesToEveryone()
+start = 10
+while start > 0:
+    for p in host.players:
+        msg = p.id.recv(4096).decode("utf-8")
+        if msg == "#GetPlayerNames#":
+            host.sendToPlayer(p, ";".join(x.getName() for x in host.players))
+        elif msg == "#gameStarted?#":
+            host.sendToPlayer(p, "0")
     time.sleep(2)
+    start -= 1
+
+for p in host.players:
+    msg = host.receiveFromPlayer(p)
+    while msg != "#gameStarted?#":
+        # PlayerNames
+        host.sendToPlayer(p, ";".join(x.getName() for x in host.players))
+        msg = host.receiveFromPlayer(p)
+    host.sendToPlayer(p, "1")
+
+
 
 #codi pagines 5-final
 numPlayers = len(host.players)

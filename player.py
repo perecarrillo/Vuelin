@@ -12,7 +12,7 @@ pc.enterGame("abc")
 
 while not pc.hasGameStarted():
     print(pc.getPlayerNames())
-    time.sleep(5)
+    time.sleep(2)
 
 # Game Starts
 
