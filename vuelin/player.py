@@ -24,20 +24,22 @@ initialQuote = input("Input your initial sentence, it must contain the word " + 
 # Comprovar prompt
 pc.setInitialQuote(initialQuote)
 
-quoteRound = True
+quoteRound = False # cert si et toca escriure
 for i in range(rounds):
     if quoteRound:
+        print("EscriureFrase")
+        photo = pc.receivePhoto()
+        showPhoto(photo)
+        sentence = input("Write a sentence that describes this photo: ")
+        pc.sendSentence(sentence)
+        
+    else: 
+        print("Dibuixar")
         sentence = pc.receiveSentence()
         print("Draw this: " + sentence)
 
         photo = readPhoto()
         pc.sendPhoto(photo)
-
-    else: 
-        photo = pc.receivePhoto()
-        showPhoto(photo)
-        sentence = input("Write a sentence that describes this photo: ")
-        pc.sendSentence(sentence)
 
 # Game has finished
 

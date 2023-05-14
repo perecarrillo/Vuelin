@@ -160,7 +160,7 @@ for p in host.players:
     frases[idxFrase] = msg
 host.historial.append(frases)
 
-it_frase = False
+it_frase = False # cert si et toca escriure frase
 cont = 0
 for i in range (1, numPlayers): #numero de rondes
     # if it_frase:
@@ -169,7 +169,7 @@ for i in range (1, numPlayers): #numero de rondes
         visited = host.assignacions[p.addr]
         frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
         num = (random.randint(0, len(frases)))
-        frasesDisponibles.remove(num)
+        frasesDisponibles.pop(num)
         if it_frase:
             host.sendToPlayer(p, host.historial[-1][num])
         else:
