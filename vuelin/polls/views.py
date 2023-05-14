@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
 from django import forms
+import os
 
 from time import sleep 
 import playerController as pl
@@ -29,6 +30,22 @@ def gameIsReady():
 
 def getPromptWord():
     return pc.getMyWord()
+
+def getImage():
+    return os.path.abspath(os.path.dirname("/home/laura/Downloads"))
+    
+
+def getOtherPrompt():
+    return "Una frase d'algú random"
+
+def getAuthor():
+    return "Algú random"
+
+def getImages():
+    return 
+
+def getGuesses():
+    return ["Una frase semblant", "Una full random"]
 
 class CountriesForm(forms.Form):
     destination = forms.ChoiceField(choices=getCountries())
@@ -104,7 +121,32 @@ def playerNameInput(request):
 def canvas(request):    
     return render(request,"canvas.html",{'redirect_url': '/polls', "prompt": prompt})
 
-i = 0
-promptRound = False
+class GuessingForm(forms.Form):
+    guess = forms.CharField(max_length=50,label='')
+
 def guessDrawing(request):
-    return render(request,'guessDrawing.html')
+    im = getImage()
+    auth = getAuthor()
+    new_prompt = getOtherPrompt()
+
+    username = request.user
+    print(username)
+
+    if request.method == 'POST':
+        form = GuessingForm(request.POST)
+        if form.is_valid():
+            guess = form.cleaned_data['guess']
+            return redirect('results')
+    else:
+        form = GuessingForm()
+    return render(request,'guessDrawing.html',{'form': form, "user":username, "image": im})
+
+def results(request):
+    images = getImages()
+    guesses = getGuesses()
+    context = {
+        "original_prompt": prompt,
+        "images": images,
+        "guesses":guesses 
+    }
+    return render(request, "results.html",context)
