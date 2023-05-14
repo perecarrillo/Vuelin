@@ -66,15 +66,19 @@ class PromptForm(forms.Form):
     prompt = forms.CharField(max_length=50,label='')
 
 prompt = "not defined"
+global word
 def writePrompt(request):
-
-    word = getPromptWord().upper()
+    global word
+    print("write prompt")
+    print(request.method)
     if request.method == 'POST':
+        print("method")
         form = PromptForm(request.POST)
         if form.is_valid():
             prompt = form.cleaned_data['prompt']            
             print(prompt)
             if word in prompt.upper():
+                print("valid")
                 pc.setInitialQuote(prompt)
                 print("kañkljd")
                 return redirect('canvas')
@@ -82,6 +86,7 @@ def writePrompt(request):
                 return render(request,'writePrompt.html',{"promptWord": word,'form': form})
     else:
         form = PromptForm()
+        word = getPromptWord().upper()
     return render(request,'writePrompt.html',{"promptWord": word,'form': form})
 
 class PlayerNameForm(forms.Form):
