@@ -79,8 +79,8 @@ class Host:
         return result
     
     def filterFrases(self, visited, available):
-        filtered = [1] * list(range(len(self.players)))
-        filtered2 = [0] * list(range(len(self.players)))
+        filtered = [1] * len(self.players)
+        filtered2 = [0] * len(self.players)
         for i in visited:
             filtered[i] = 0
         for i in available:
