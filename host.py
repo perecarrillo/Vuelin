@@ -29,19 +29,20 @@ class Host:
     def listenForPlayers(self):
         while True:
             self.server.listen(10)
-            player, addr = self.server.accept()
+            p, addr = self.server.accept()
+            player = Player(p, addr)
             print("accepted, waiting for recv")
             roomNumber = None
             while not roomNumber:
-                roomNumber = self.receiveFromPlayer(p)
+                roomNumber = self.receiveFromPlayer(player)
                 print(roomNumber)
             print("recieved")
             if (roomNumber == self.gameCode): 
-                self.players.append(Player(player, addr))
+                self.players.append(player)
                 print(str(addr) + " accepted!")
             else:
                 print(str(addr) + " rejecteed! " + roomNumber)
-                player.close()
+                player.id.close()
 
     def sendPlayerNamesToEveryone(self):
         for p in self.players:
