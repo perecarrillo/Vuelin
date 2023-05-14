@@ -92,4 +92,4 @@ def playerNameInput(request):
     return render(request,'playerNameInput.html',{'form': form})
 
 def canvas(request):
-    return render(request,"canvas.html")
+    return render(request,"canvas.html",{'redirect_url': '/polls'})
