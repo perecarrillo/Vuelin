@@ -122,40 +122,48 @@ for p in host.players:
     host.assignacions[p.addr] = []
 
 start = 10
+dict = {}
 while input(":") != "n":
     for p in host.players:
         msg = p.id.recv(4096).decode("utf-8")
+        print(msg)
         if msg == "#GetPlayerNames#":
             host.sendToPlayer(p, ";".join(x.getName() for x in host.players))
         elif msg == "#gameStarted?#":
             host.sendToPlayer(p, "0")
-    time.sleep(2)
-    print("iteration")
+            dict[p] = True
+    #time.sleep(2)
     start -= 1
-
+print(dict)
 for p in host.players:
-    msg = host.receiveFromPlayer(p)
-    while msg != "#gameStarted?#":
-        # PlayerNames
-        host.sendToPlayer(p, ";".join(x.getName() for x in host.players))
+    if not (p in dict):
         msg = host.receiveFromPlayer(p)
-    host.sendToPlayer(p, "1")
+        while msg != "#gameStarted?#":
+            # PlayerNames
+            host.sendToPlayer(p, ";".join(x.getName() for x in host.players))
+            msg = host.receiveFromPlayer(p)
+        host.sendToPlayer(p, "1")
 
 
 
 #codi pagines 5-final
 numPlayers = len(host.players)
+
+print("numPlayers: ", numPlayers)
 # un cop es dona play
 # escull una paraula random del pais
 for i, p in enumerate(host.players):
     host.sendToPlayer(p, random.choice(host.paraulesPais[host.getDestination()]))
+    #print("Sending to player ", i)
     host.assignacions[p.addr] = [i]
 
 
 # Crear frases inicials
 frases = [0] * numPlayers
 for p in host.players:
+    print("receiving from ", p.addr)
     msg = host.receiveFromPlayer(p)
+    print("received ", msg)
     idxFrase = host.getLastAssignacio(p.addr)
     frases[idxFrase] = msg
 host.historial.append(frases)
@@ -169,7 +177,7 @@ for i in range (1, numPlayers): #numero de rondes
         visited = host.assignacions[p.addr]
         frases = host.filterFrases(visited, frasesDisponibles) # conjunt de frases que encara no s'han assignat a aquesta ronda
         num = (random.randint(0, len(frases) - 1))
-        print(len(frases))
+        #print(len(frases))
         frasesDisponibles.remove(frases[num])
         if it_frase:
             host.sendToPlayer(p, host.historial[-1][num])
